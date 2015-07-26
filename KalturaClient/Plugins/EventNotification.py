@@ -937,8 +937,8 @@ class KalturaEventNotificationTemplateService(KalturaServiceBase):
 
     def add(self, eventNotificationTemplate):
         """This action allows for the creation of new backend event types in the system. This action requires access to the Kaltura server Admin Console. If you’re looking to register to existing event types, please use the clone action instead."""
-
-        kparams = KalturaParams()
+        
+	kparams = KalturaParams()
         kparams.addObjectIfDefined("eventNotificationTemplate", eventNotificationTemplate)
         self.client.queueServiceActionCall("eventnotification_eventnotificationtemplate", "add", KalturaEventNotificationTemplate, kparams)
         if self.client.isMultiRequest():
