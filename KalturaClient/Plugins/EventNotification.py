@@ -936,9 +936,9 @@ class KalturaEventNotificationTemplateService(KalturaServiceBase):
         KalturaServiceBase.__init__(self, client)
 
     def add(self, eventNotificationTemplate):
-        """This action allows for the creation of new backend event types in the system. This action requires access to the Kaltura server Admin Console. If you’re looking to register to existing event types, please use the clone action instead."""
-        
-	kparams = KalturaParams()
+        """Allows you to add a new event notification template object"""
+
+        kparams = KalturaParams()
         kparams.addObjectIfDefined("eventNotificationTemplate", eventNotificationTemplate)
         self.client.queueServiceActionCall("eventnotification_eventnotificationtemplate", "add", KalturaEventNotificationTemplate, kparams)
         if self.client.isMultiRequest():
@@ -947,7 +947,7 @@ class KalturaEventNotificationTemplateService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, KalturaEventNotificationTemplate)
 
     def clone(self, id, eventNotificationTemplate = NotImplemented):
-        """This action allows registering to various backend event. Use this action to create notifications that will react to events such as new video was uploaded or metadata field was updated. To see the list of available event types, call the listTemplates action."""
+        """Allows you to clone exiting event notification template object and create a new one with similar configuration"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);

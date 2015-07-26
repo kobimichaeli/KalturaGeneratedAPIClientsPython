@@ -47,18 +47,6 @@ class KalturaCuePointStatus(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaThumbCuePointSubType(object):
-    SLIDE = 1
-    CHAPTER = 2
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaCuePointOrderBy(object):
     CREATED_AT_ASC = "+createdAt"
     PARTNER_SORT_VALUE_ASC = "+partnerSortValue"
@@ -86,7 +74,6 @@ class KalturaCuePointType(object):
     EVENT = "eventCuePoint.Event"
     QUIZ_ANSWER = "quiz.QUIZ_ANSWER"
     QUIZ_QUESTION = "quiz.QUIZ_QUESTION"
-    THUMB = "thumbCuePoint.Thumb"
 
     def __init__(self, value):
         self.value = value
@@ -290,38 +277,7 @@ class KalturaCuePoint(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCuePointListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # @var array of KalturaCuePoint
-        # @readonly
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, KalturaCuePoint), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCuePointListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaCuePointListResponse")
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCuePointBaseFilter(KalturaRelatedFilter):
+class KalturaCuePointBaseFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             advancedSearch=NotImplemented,
@@ -353,7 +309,7 @@ class KalturaCuePointBaseFilter(KalturaRelatedFilter):
             forceStopEqual=NotImplemented,
             systemNameEqual=NotImplemented,
             systemNameIn=NotImplemented):
-        KalturaRelatedFilter.__init__(self,
+        KalturaFilter.__init__(self,
             orderBy,
             advancedSearch)
 
@@ -474,11 +430,11 @@ class KalturaCuePointBaseFilter(KalturaRelatedFilter):
     }
 
     def fromXml(self, node):
-        KalturaRelatedFilter.fromXml(self, node)
+        KalturaFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaCuePointBaseFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaRelatedFilter.toParams(self)
+        kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaCuePointBaseFilter")
         kparams.addStringIfDefined("idEqual", self.idEqual)
         kparams.addStringIfDefined("idIn", self.idIn)
@@ -681,6 +637,37 @@ class KalturaCuePointBaseFilter(KalturaRelatedFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCuePointListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # @var array of KalturaCuePoint
+        # @readonly
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, KalturaCuePoint), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCuePointListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaCuePointListResponse")
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCuePointFilter(KalturaCuePointBaseFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -713,9 +700,7 @@ class KalturaCuePointFilter(KalturaCuePointBaseFilter):
             forceStopEqual=NotImplemented,
             systemNameEqual=NotImplemented,
             systemNameIn=NotImplemented,
-            freeText=NotImplemented,
-            userIdEqualCurrent=NotImplemented,
-            userIdCurrent=NotImplemented):
+            freeText=NotImplemented):
         KalturaCuePointBaseFilter.__init__(self,
             orderBy,
             advancedSearch,
@@ -751,17 +736,9 @@ class KalturaCuePointFilter(KalturaCuePointBaseFilter):
         # @var string
         self.freeText = freeText
 
-        # @var KalturaNullableBoolean
-        self.userIdEqualCurrent = userIdEqualCurrent
-
-        # @var KalturaNullableBoolean
-        self.userIdCurrent = userIdCurrent
-
 
     PROPERTY_LOADERS = {
         'freeText': getXmlNodeText, 
-        'userIdEqualCurrent': (KalturaEnumsFactory.createInt, "KalturaNullableBoolean"), 
-        'userIdCurrent': (KalturaEnumsFactory.createInt, "KalturaNullableBoolean"), 
     }
 
     def fromXml(self, node):
@@ -772,8 +749,6 @@ class KalturaCuePointFilter(KalturaCuePointBaseFilter):
         kparams = KalturaCuePointBaseFilter.toParams(self)
         kparams.put("objectType", "KalturaCuePointFilter")
         kparams.addStringIfDefined("freeText", self.freeText)
-        kparams.addIntEnumIfDefined("userIdEqualCurrent", self.userIdEqualCurrent)
-        kparams.addIntEnumIfDefined("userIdCurrent", self.userIdCurrent)
         return kparams
 
     def getFreeText(self):
@@ -781,18 +756,6 @@ class KalturaCuePointFilter(KalturaCuePointBaseFilter):
 
     def setFreeText(self, newFreeText):
         self.freeText = newFreeText
-
-    def getUserIdEqualCurrent(self):
-        return self.userIdEqualCurrent
-
-    def setUserIdEqualCurrent(self, newUserIdEqualCurrent):
-        self.userIdEqualCurrent = newUserIdEqualCurrent
-
-    def getUserIdCurrent(self):
-        return self.userIdCurrent
-
-    def setUserIdCurrent(self, newUserIdCurrent):
-        self.userIdCurrent = newUserIdCurrent
 
 
 ########## services ##########
@@ -914,7 +877,6 @@ class KalturaCuePointClientPlugin(KalturaClientPlugin):
     def getEnums(self):
         return {
             'KalturaCuePointStatus': KalturaCuePointStatus,
-            'KalturaThumbCuePointSubType': KalturaThumbCuePointSubType,
             'KalturaCuePointOrderBy': KalturaCuePointOrderBy,
             'KalturaCuePointType': KalturaCuePointType,
         }
@@ -922,8 +884,8 @@ class KalturaCuePointClientPlugin(KalturaClientPlugin):
     def getTypes(self):
         return {
             'KalturaCuePoint': KalturaCuePoint,
-            'KalturaCuePointListResponse': KalturaCuePointListResponse,
             'KalturaCuePointBaseFilter': KalturaCuePointBaseFilter,
+            'KalturaCuePointListResponse': KalturaCuePointListResponse,
             'KalturaCuePointFilter': KalturaCuePointFilter,
         }
 
